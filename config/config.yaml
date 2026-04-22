@@ -1,0 +1,74 @@
+# ThemeHunter 主题猎手 - 主配置文件
+# A股题材挖掘和预期管理系统
+
+project:
+  name: "ThemeHunter - 题材猎手"
+  version: "1.0.0"
+  description: "独立的A股题材挖掘和预期管理系统，专注'提前埋伏'策略"
+  author: "ThemeHunter Team"
+
+llm:
+  provider: "xunfei"
+  model: "astron-code-latest"
+  api_base: "https://maas-coding-api.cn-huabei-1.xf-yun.com/v2"
+  timeout: 60
+  max_retries: 3
+
+schedule:
+  # 定时任务时间配置
+  morning_report: "08:30"      # 早报
+  midday_scan: "11:30"         # 午间扫描
+  afternoon_report: "14:30"    # 午后报告
+  evening_summary: "20:00"     # 晚间总结
+  
+  # 实时监控配置
+  news_monitor_interval: 300   # 新闻监控间隔（秒），默认5分钟
+  market_open_monitor: true    # 开盘期间监控
+  after_hours_monitor: false   # 盘后是否监控
+
+threshold:
+  # 题材评分阈值
+  min_theme_score: 60          # 最低题材得分（低于此分不推送）
+  min_confidence: 0.65         # 最低置信度
+  hot_topic_threshold: 75      # 热门题材阈值
+  
+  # 资金流向阈值
+  min_flow_amount: 100000000   # 最小资金流入金额（元）
+  flow_change_threshold: 0.2   # 资金流入变化阈值
+
+notification:
+  telegram:
+    enabled: true
+    bot_token: ""  # 从环境变量或 .env 读取
+    chat_ids:
+      - ""  # 配置通知的 chat_id
+  
+  # 推送等级
+  push_levels:
+    high_opportunity: 85       # 高机会题材（≥85分）
+    medium_opportunity: 70     # 中等机会题材（70-84分）
+    watch_only: 60             # 仅关注（60-69分）
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file_rotation: true
+  max_bytes: 10485760  # 10MB
+  backup_count: 7
+  log_dir: "logs"
+
+storage:
+  data_dir: "data"
+  news_cache_ttl: 86400       # 新闻缓存TTL（秒），默认24小时
+  theme_record_ttl: 604800     # 题材记录TTL（秒），默认7天
+  
+paths:
+  config_dir: "config"
+  data_dir: "data"
+  output_dir: "output"
+  reports_dir: "output/reports"
+  alerts_dir: "output/alerts"
+  news_dir: "data/news"
+  themes_dir: "data/themes"
+  calendar_dir: "data/calendar"
+  logs_dir: "logs"

@@ -1,0 +1,113 @@
+# 数据源配置文件
+# 定义新闻采集的数据源
+
+sources:
+  # 快讯类（实时性强）
+  fast_news:
+    - name: "财联社电报"
+      type: "api"
+      url: "https://www.cls.cn/api/sw?app=CLS&sv=8.4.0&os=web"
+      priority: 1
+      enabled: true
+      rate_limit: 60  # 每分钟最多请求次数
+
+    - name: "东方财富快讯"
+      type: "rss"
+      url: "https://feed.eastmoney.com/lives.html"
+      priority: 2
+      enabled: true
+
+  # 财经新闻类
+  finance_news:
+    - name: "同花顺资讯"
+      type: "web"
+      url: "https://news.10jqka.com.cn/tapp/news/politics/stock/"
+      priority: 1
+      enabled: true
+      css_selector: ".news-list li"
+
+    - name: "新浪财经"
+      type: "rss"
+      url: "https://rss.sina.com.cn/news/china/focus15.xml"
+      priority: 2
+      enabled: true
+
+    - name: "证券时报"
+      type: "web"
+      url: "http://www.stcn.com/article/list?catename=yaowen"
+      priority: 2
+      enabled: true
+
+    - name: "第一财经"
+      type: "rss"
+      url: "https://www.yicai.com/rss"
+      priority: 3
+      enabled: true
+
+  # 研报类
+  research_reports:
+    - name: "东方财富研报"
+      type: "api"
+      url: "https://report.eastmoney.com"
+      priority: 1
+      enabled: true
+      require_auth: false
+
+    - name: "同花顺研报"
+      type: "web"
+      url: "https://data.10jqka.com.cn/research/"
+      priority: 2
+      enabled: true
+
+  # 政策类
+  policy_news:
+    - name: "中国政府网"
+      type: "rss"
+      url: "http://www.gov.cn/foot/rss/policy.html"
+      priority: 1
+      enabled: true
+
+    - name: "发改委官网"
+      type: "web"
+      url: "https://www.ndrc.gov.cn/xwzx/xwfb/"
+      priority: 1
+      enabled: true
+
+    - name: "工信部官网"
+      type: "web"
+      url: "https://www.miit.gov.cn/xwdt/xwfb/"
+      priority: 1
+      enabled: true
+
+  # 科技类
+  tech_news:
+    - name: "36氪"
+      type: "rss"
+      url: "https://36kr.com/feed"
+      priority: 1
+      enabled: true
+
+    - name: "虎嗅"
+      type: "rss"
+      url: "https://www.huxiu.com/rss/"
+      priority: 2
+      enabled: true
+
+    - name: "TechCrunch中国"
+      type: "rss"
+      url: "https://techcrunch.cn/feed/"
+      priority: 3
+      enabled: false
+
+# 数据源健康检查
+health_check:
+  enabled: true
+  interval: 3600  # 每小时检查一次
+  failure_threshold: 3  # 连续失败3次后标记为不可用
+
+# 请求配置
+request:
+  timeout: 30
+  headers:
+    User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  verify_ssl: true

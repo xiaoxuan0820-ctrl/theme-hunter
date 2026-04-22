@@ -1,0 +1,316 @@
+# 题材关键词库
+# 用于从新闻中识别和提取题材
+
+# 题材关键词配置
+theme_keywords:
+  # 新兴产业类
+  低空经济:
+    keywords:
+      - "低空经济"
+      - "eVTOL"
+      - "飞行汽车"
+      - "低空飞行"
+      - "空中出行"
+      - "城市空中交通"
+      - "UAM"
+      - "通用航空"
+      - "无人机物流"
+      - "低空空域"
+    related_sectors:
+      - "航空航天"
+      - "无人机"
+      - "智能交通"
+    sentiment: "positive"
+
+  AI眼镜:
+    keywords:
+      - "AI眼镜"
+      - "AR眼镜"
+      - "智能眼镜"
+      - "Vision Pro"
+      - "空间计算"
+      - "MR混合现实"
+      - "XR"
+      - "Meta Ray-Ban"
+      - "智能穿戴"
+      - "AR/VR"
+    related_sectors:
+      - "消费电子"
+      - "光学光电子"
+      - "元宇宙"
+    sentiment: "positive"
+
+  固态电池:
+    keywords:
+      - "固态电池"
+      - "全固态电池"
+      - "电池突破"
+      - "能量密度"
+      - "固态电解质"
+      - "锂金属负极"
+    related_sectors:
+      - "动力电池"
+      - "新材料"
+      - "新能源车"
+    sentiment: "positive"
+
+  固态储氢:
+    keywords:
+      - "固态储氢"
+      - "氢能"
+      - "储氢材料"
+      - "氢燃料电池"
+    related_sectors:
+      - "氢能源"
+      - "储能"
+    sentiment: "positive"
+
+  量子计算:
+    keywords:
+      - "量子计算"
+      - "量子计算机"
+      - "量子芯片"
+      - "量子霸权"
+      - "量子通信"
+    related_sectors:
+      - "半导体"
+      - "信息技术"
+    sentiment: "positive"
+
+  脑机接口:
+    keywords:
+      - "脑机接口"
+      - "BCI"
+      - "神经接口"
+      - "意念控制"
+    related_sectors:
+      - "医疗器械"
+      - "人工智能"
+    sentiment: "positive"
+
+  人形机器人:
+    keywords:
+      - "人形机器人"
+      - "具身智能"
+      - "仿生机器人"
+      - "协作机器人"
+      - "智能机器人"
+    related_sectors:
+      - "机器人"
+      - "人工智能"
+      - "智能制造"
+    sentiment: "positive"
+
+  # 政策驱动类
+  新能源汽车:
+    keywords:
+      - "新能源汽车"
+      - "电动车"
+      - "充电桩"
+      - "换电"
+      - "锂离子电池"
+      - "动力电池"
+      - "新能源车购置税"
+    related_sectors:
+      - "新能源汽车"
+      - "锂电池"
+      - "充电桩"
+    sentiment: "positive"
+
+  半导体:
+    keywords:
+      - "半导体"
+      - "芯片"
+      - "集成电路"
+      - "晶圆代工"
+      - "光刻机"
+      - "国产替代"
+      - "先进制程"
+    related_sectors:
+      - "半导体"
+      - "电子元件"
+    sentiment: "positive"
+
+  人工智能:
+    keywords:
+      - "人工智能"
+      - "AI大模型"
+      - "ChatGPT"
+      - "大语言模型"
+      - "生成式AI"
+      - "AGI"
+      - "AIGC"
+    related_sectors:
+      - "软件开发"
+      - "云计算"
+      - "算力"
+    sentiment: "positive"
+
+  数据要素:
+    keywords:
+      - "数据要素"
+      - "数据资产"
+      - "数据交易"
+      - "数字经济"
+      - "数据安全"
+    related_sectors:
+      - "大数据"
+      - "云计算"
+      - "信息安全"
+    sentiment: "positive"
+
+  # 周期类
+  猪肉:
+    keywords:
+      - "猪肉"
+      - "生猪"
+      - "猪周期"
+      - "能繁母猪"
+      - "猪价"
+    related_sectors:
+      - "农牧饲渔"
+    sentiment: "neutral"
+
+  稀土:
+    keywords:
+      - "稀土"
+      - "稀土永磁"
+      - "镨钕"
+      - "钕铁硼"
+    related_sectors:
+      - "有色金属"
+    sentiment: "neutral"
+
+  航运:
+    keywords:
+      - "航运"
+      - "集运"
+      - "油运"
+      - "BDI指数"
+      - "海运"
+    related_sectors:
+      - "港口航运"
+    sentiment: "neutral"
+
+  # 事件驱动类
+  苹果产业链:
+    keywords:
+      - "苹果产业链"
+      - "iPhone"
+      - "Apple"
+      - "WWDC"
+      - "苹果发布会"
+    related_sectors:
+      - "消费电子"
+      - "苹果概念"
+    sentiment: "positive"
+
+  华为产业链:
+    keywords:
+      - "华为"
+      - "鸿蒙"
+      - "Mate"
+      - "麒麟芯片"
+      - "华为发布会"
+    related_sectors:
+      - "消费电子"
+      - "国产替代"
+    sentiment: "positive"
+
+  特斯拉:
+    keywords:
+      - "特斯拉"
+      - "Tesla"
+      - "4680电池"
+      - "FSD"
+      - "人形机器人"
+    related_sectors:
+      - "新能源汽车"
+      - "锂电池"
+    sentiment: "positive"
+
+# 催化剂关键词（用于识别题材触发事件）
+catalyst_keywords:
+  # 政策催化剂
+  policy:
+    - "政策出台"
+    - "政策支持"
+    - "补贴"
+    - "专项资金"
+    - "试点"
+    - "示范区"
+    - "推广"
+    - "国家标准"
+    - "行业标准"
+    - "十四五"
+    - "规划"
+    - "纲要"
+    - "意见"
+    - "通知"
+    - "复函"
+
+  # 商业化催化剂
+  commercial:
+    - "量产"
+    - "量产交付"
+    - "商业化"
+    - "规模化"
+    - "订单"
+    - "签约"
+    - "发布"
+    - "新品发布"
+    - "产品发布"
+    - "上市"
+    - "发售"
+
+  # 技术催化剂
+  technology:
+    - "技术突破"
+    - "研发成功"
+    - "全球首款"
+    - "世界领先"
+    - "首次"
+    - "独家"
+    - "专利"
+    - "认证"
+    - "检测通过"
+
+  # 会议/事件催化剂
+  event:
+    - "发布会"
+    - "峰会"
+    - "论坛"
+    - "博览会"
+    - "交易会"
+    - "广交会"
+    - "进博会"
+    - "CES"
+    - "MWC"
+    - "数贸会"
+
+# 龙头股识别关键词
+leader_keywords:
+  - "龙头"
+  - "龙头股"
+  - "行业龙头"
+  - "市场龙头"
+  - "龙头标的"
+  - "核心标的"
+  - "首选"
+  - "领涨"
+  - "涨幅领先"
+
+# 风险关键词（用于识别风险）
+risk_keywords:
+  - "减持"
+  - "解禁"
+  - "业绩亏损"
+  - "商誉减值"
+  - "监管函"
+  - "问询函"
+  - "立案调查"
+  - "诉讼"
+  - "债务违约"
+  - "资金链紧张"
+  - "产能过剩"
+  - "价格战"

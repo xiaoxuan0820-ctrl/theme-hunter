@@ -1,0 +1,152 @@
+# 题材演化模式库
+evolution_patterns:
+  疫情类:
+    chain:
+      - stage: "防护物资"
+        keywords: ["口罩", "防护服", "消毒液", "手套", "熔喷布"]
+        duration: "爆发后1-2周"
+        typical_stocks: ["振德医疗", "奥美医疗"]
+      - stage: "检测诊断"
+        keywords: ["检测试剂", "核酸检测", "抗原检测", "体外诊断"]
+        duration: "2-6周"
+        typical_stocks: ["华大基因", "达安基因", "热景生物"]
+      - stage: "疫苗研发"
+        keywords: ["疫苗", "临床试验", "mRNA", "灭活疫苗"]
+        duration: "2-8个月"
+        typical_stocks: ["智飞生物", "康希诺", "沃森生物"]
+      - stage: "治疗药物"
+        keywords: ["特效药", "治疗药物", "中和抗体", "小分子药"]
+        duration: "3-12个月"
+        typical_stocks: ["真实生物", "君实生物"]
+      - stage: "复工复产"
+        keywords: ["复工复产", "经济恢复", "复商复市"]
+        duration: "疫情受控后"
+        typical_stocks: []
+
+  新能源类:
+    chain:
+      - stage: "政策驱动"
+        keywords: ["政策支持", "补贴", "规划", "十四五", "双碳", "碳中和"]
+        duration: "政策后1-3月"
+        typical_stocks: []
+      - stage: "技术突破"
+        keywords: ["技术突破", "量产", "成本下降", "能量密度", "效率提升"]
+        duration: "突破后1-6月"
+        typical_stocks: ["宁德时代", "比亚迪", "隆基绿能"]
+      - stage: "产业化"
+        keywords: ["产业化", "规模化", "订单", "产能释放", "量产交付"]
+        duration: "3-12个月"
+        typical_stocks: ["亿纬锂能", "恩捷股份", "璞泰来"]
+      - stage: "业绩兑现"
+        keywords: ["业绩增长", "盈利", "营收增长", "净利润", "财报超预期"]
+        duration: "规模放量后"
+        typical_stocks: []
+
+  固态电池类:
+    chain:
+      - stage: "技术突破"
+        keywords: ["固态电池", "全固态", "固态电解质", "锂金属负极", "能量密度突破"]
+        duration: "突破后1-3月"
+        typical_stocks: ["宁德时代", "赣锋锂业", "国轩高科"]
+      - stage: "量产准备"
+        keywords: ["量产", "生产线", "产能", "中试", "良品率"]
+        duration: "6-18月"
+        typical_stocks: ["先导智能", "赢合科技"]
+      - stage: "装车验证"
+        keywords: ["装车", "配套", "车企", "定点", "验证"]
+        duration: "量产前后"
+        typical_stocks: ["比亚迪", "蔚来"]
+      - stage: "规模放量"
+        keywords: ["放量", "出货", "装机量", "市场份额"]
+        duration: "量产后"
+        typical_stocks: []
+
+  低空经济类:
+    chain:
+      - stage: "政策驱动"
+        keywords: ["低空经济", "低空空域", "空域管理", "示范区", "试点"]
+        duration: "政策后1-3月"
+        typical_stocks: []
+      - stage: "产业规划"
+        keywords: ["产业规划", "园区", "基地", "招商引资", "产业链布局"]
+        duration: "3-12月"
+        typical_stocks: ["万丰奥威", "中信海直"]
+      - stage: "技术验证"
+        keywords: ["eVTOL", "飞行汽车", "适航认证", "试飞", "商业化验证"]
+        duration: "6-24月"
+        typical_stocks: ["亿航智能", "峰飞航空"]
+      - stage: "商业化运营"
+        keywords: ["商业运营", "首飞", "载人", "城市空中交通", "UAM"]
+        duration: "商业化初期"
+        typical_stocks: []
+
+  AI类:
+    chain:
+      - stage: "技术突破"
+        keywords: ["模型突破", "算法革新", "性能提升", "GPT", "大模型", "参数"]
+        duration: "突破后1-3月"
+        typical_stocks: ["科大讯飞", "寒武纪", "海光信息"]
+      - stage: "生态建设"
+        keywords: ["生态", "开发者", "API", "平台", "插件"]
+        duration: "2-6月"
+        typical_stocks: ["百度", "阿里", "腾讯"]
+      - stage: "应用落地"
+        keywords: ["应用场景", "商业化", "B端", "C端", "解决方案"]
+        duration: "3-12月"
+        typical_stocks: []
+      - stage: "业绩兑现"
+        keywords: ["收入增长", "用户增长", "付费率", "营收"]
+        duration: "规模后"
+        typical_stocks: []
+
+  消费电子类:
+    chain:
+      - stage: "产品发布"
+        keywords: ["发布会", "新品", "首发", "亮相", "官宣"]
+        duration: "发布前1-2周"
+        typical_stocks: []
+      - stage: "预售抢购"
+        keywords: ["预售", "抢购", "预约", "破纪录", "预订"]
+        duration: "发布后1-4周"
+        typical_stocks: ["立讯精密", "歌尔股份", "蓝思科技"]
+      - stage: "量产爬坡"
+        keywords: ["量产", "产能", "良率", "供应", "备货"]
+        duration: "1-3个月"
+        typical_stocks: ["鹏鼎控股", "东山精密"]
+      - stage: "销售旺季"
+        keywords: ["销量", "市场份额", "节假日", "618", "双11"]
+        duration: "持续"
+        typical_stocks: []
+
+  半导体类:
+    chain:
+      - stage: "技术突破"
+        keywords: ["突破", "量产", "28nm", "14nm", "7nm", "国产替代"]
+        duration: "突破后1-6月"
+        typical_stocks: ["中芯国际", "华虹半导体"]
+      - stage: "客户验证"
+        keywords: ["验证", "测试", "导入", "认证", "送样"]
+        duration: "3-12月"
+        typical_stocks: []
+      - stage: "小批量量产"
+        keywords: ["小批量", "量产", "产能", "订单", "交付"]
+        duration: "量产后3-12月"
+        typical_stocks: ["长电科技", "通富微电"]
+      - stage: "规模放量"
+        keywords: ["出货", "放量", "市占率", "规模化"]
+        duration: "规模后"
+        typical_stocks: []
+
+cross_theme_correlations:
+  - trigger: "口罩需求"
+    leads_to: ["检测试剂", "疫苗"]
+    correlation: 0.8
+  - trigger: "新能源汽车购置税减免"
+    leads_to: ["充电桩", "锂电", "零部件"]
+    correlation: 0.7
+  - trigger: "AI大模型发布"
+    leads_to: ["算力", "应用", "数据"]
+    correlation: 0.9
+  - trigger: "iPhone发布"
+    leads_to: ["苹果链", "射频", "光学", "散热"]
+    correlation: 0.8
