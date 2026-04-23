@@ -1,9 +1,12 @@
-# 题材关键词库
-# 用于从新闻中识别和提取题材
+# -*- coding: utf-8 -*-
+# 题材关键词库 - 增强版
+# 用于从新闻中识别和提取题材，支持多维度评估
 
-# 题材关键词配置
 theme_keywords:
-  # 新兴产业类
+  # ═══════════════════════════════════════════════════════════════
+  # 新兴产业类 - 技术突破驱动
+  # ═══════════════════════════════════════════════════════════════
+  
   低空经济:
     keywords:
       - "低空经济"
@@ -16,11 +19,16 @@ theme_keywords:
       - "通用航空"
       - "无人机物流"
       - "低空空域"
+      - "城市空中出行"
+      - "AAM"
     related_sectors:
       - "航空航天"
       - "无人机"
       - "智能交通"
+      - "低空基础设施"
     sentiment: "positive"
+    theme_type: "technology"
+    base_weight: 1.2
 
   AI眼镜:
     keywords:
@@ -34,11 +42,17 @@ theme_keywords:
       - "Meta Ray-Ban"
       - "智能穿戴"
       - "AR/VR"
+      - "AI可穿戴"
+      - "智能头显"
+      - "AI终端"
     related_sectors:
       - "消费电子"
       - "光学光电子"
       - "元宇宙"
+      - "AI芯片"
     sentiment: "positive"
+    theme_type: "product"
+    base_weight: 1.1
 
   固态电池:
     keywords:
@@ -48,11 +62,17 @@ theme_keywords:
       - "能量密度"
       - "固态电解质"
       - "锂金属负极"
+      - "固态锂电"
+      - "全固锂电池"
+      - "固态电池量产"
     related_sectors:
       - "动力电池"
       - "新材料"
       - "新能源车"
+      - "电解质"
     sentiment: "positive"
+    theme_type: "technology"
+    base_weight: 1.3
 
   固态储氢:
     keywords:
@@ -60,10 +80,15 @@ theme_keywords:
       - "氢能"
       - "储氢材料"
       - "氢燃料电池"
+      - "固态储氢材料"
+      - "氢能源"
     related_sectors:
       - "氢能源"
       - "储能"
+      - "新材料"
     sentiment: "positive"
+    theme_type: "technology"
+    base_weight: 1.0
 
   量子计算:
     keywords:
@@ -72,10 +97,15 @@ theme_keywords:
       - "量子芯片"
       - "量子霸权"
       - "量子通信"
+      - "量子密钥"
+      - "量子云"
     related_sectors:
       - "半导体"
       - "信息技术"
+      - "信息安全"
     sentiment: "positive"
+    theme_type: "technology"
+    base_weight: 1.0
 
   脑机接口:
     keywords:
@@ -83,10 +113,15 @@ theme_keywords:
       - "BCI"
       - "神经接口"
       - "意念控制"
+      - "脑电"
+      - "神经调控"
     related_sectors:
       - "医疗器械"
       - "人工智能"
+      - "神经科学"
     sentiment: "positive"
+    theme_type: "technology"
+    base_weight: 1.1
 
   人形机器人:
     keywords:
@@ -95,13 +130,69 @@ theme_keywords:
       - "仿生机器人"
       - "协作机器人"
       - "智能机器人"
+      - "仿人机器人"
+      - "机器人关节"
     related_sectors:
       - "机器人"
       - "人工智能"
       - "智能制造"
+      - "减速器"
     sentiment: "positive"
+    theme_type: "technology"
+    base_weight: 1.3
 
-  # 政策驱动类
+  液流电池:
+    keywords:
+      - "液流电池"
+      - "全钒液流"
+      - "锌溴液流"
+      - "长时储能"
+      - "储能电池"
+    related_sectors:
+      - "储能"
+      - "电池"
+      - "新能源"
+    sentiment: "positive"
+    theme_type: "technology"
+    base_weight: 1.0
+
+  核聚变:
+    keywords:
+      - "核聚变"
+      - "人造太阳"
+      - "托卡马克"
+      - "聚变能"
+      - "惯性约束"
+      - "磁约束"
+    related_sectors:
+      - "核能"
+      - "新能源"
+      - "高端装备"
+    sentiment: "positive"
+    theme_type: "technology"
+    base_weight: 1.2
+
+  光通信:
+    keywords:
+      - "光通信"
+      - "光模块"
+      - "光芯片"
+      - "CPO"
+      - "共封装光学"
+      - "硅光"
+      - "光纤"
+    related_sectors:
+      - "通信设备"
+      - "半导体"
+      - "数据中心"
+    sentiment: "positive"
+    theme_type: "technology"
+    base_weight: 1.1
+
+  # ═══════════════════════════════════════════════════════════════
+  # 政策驱动类 - 政策发布驱动
+  # ═══════════════════════════════════════════════════════════════
+
   新能源汽车:
     keywords:
       - "新能源汽车"
@@ -111,11 +202,16 @@ theme_keywords:
       - "锂离子电池"
       - "动力电池"
       - "新能源车购置税"
+      - "智能驾驶"
+      - "自动驾驶"
     related_sectors:
       - "新能源汽车"
       - "锂电池"
       - "充电桩"
+      - "智能驾驶"
     sentiment: "positive"
+    theme_type: "policy"
+    base_weight: 1.2
 
   半导体:
     keywords:
@@ -126,10 +222,16 @@ theme_keywords:
       - "光刻机"
       - "国产替代"
       - "先进制程"
+      - "成熟制程"
+      - "HBM"
+      - "AI芯片"
     related_sectors:
       - "半导体"
       - "电子元件"
+      - "设备材料"
     sentiment: "positive"
+    theme_type: "policy"
+    base_weight: 1.3
 
   人工智能:
     keywords:
@@ -140,11 +242,17 @@ theme_keywords:
       - "生成式AI"
       - "AGI"
       - "AIGC"
+      - "多模态AI"
+      - "AI应用"
+      - "大模型"
     related_sectors:
       - "软件开发"
       - "云计算"
       - "算力"
+      - "AI芯片"
     sentiment: "positive"
+    theme_type: "technology"
+    base_weight: 1.4
 
   数据要素:
     keywords:
@@ -153,13 +261,52 @@ theme_keywords:
       - "数据交易"
       - "数字经济"
       - "数据安全"
+      - "数据确权"
+      - "数据入表"
     related_sectors:
       - "大数据"
       - "云计算"
       - "信息安全"
     sentiment: "positive"
+    theme_type: "policy"
+    base_weight: 1.0
 
-  # 周期类
+  商业航天:
+    keywords:
+      - "商业航天"
+      - "卫星互联网"
+      - "火箭发射"
+      - "卫星星座"
+      - "SpaceX"
+      - "星链"
+      - "可回收火箭"
+    related_sectors:
+      - "航天航空"
+      - "卫星制造"
+      - "火箭发射"
+    sentiment: "positive"
+    theme_type: "policy"
+    base_weight: 1.2
+
+  低空政策:
+    keywords:
+      - "低空空域开放"
+      - "低空管理"
+      - "空域改革"
+      - "低空专项"
+      - "适航认证"
+    related_sectors:
+      - "航空"
+      - "无人机"
+      - "低空经济"
+    sentiment: "positive"
+    theme_type: "policy"
+    base_weight: 1.3
+
+  # ═══════════════════════════════════════════════════════════════
+  # 周期类 - 供需周期驱动
+  # ═══════════════════════════════════════════════════════════════
+
   猪肉:
     keywords:
       - "猪肉"
@@ -167,9 +314,14 @@ theme_keywords:
       - "猪周期"
       - "能繁母猪"
       - "猪价"
+      - "仔猪"
+      - "二元母猪"
     related_sectors:
       - "农牧饲渔"
+      - "养殖"
     sentiment: "neutral"
+    theme_type: "cycle"
+    base_weight: 1.0
 
   稀土:
     keywords:
@@ -177,9 +329,14 @@ theme_keywords:
       - "稀土永磁"
       - "镨钕"
       - "钕铁硼"
+      - "氧化镨钕"
+      - "稀土出口"
     related_sectors:
       - "有色金属"
+      - "磁材"
     sentiment: "neutral"
+    theme_type: "cycle"
+    base_weight: 1.0
 
   航运:
     keywords:
@@ -188,129 +345,465 @@ theme_keywords:
       - "油运"
       - "BDI指数"
       - "海运"
+      - "VLCC"
+      - "集装箱"
+      - "运价"
     related_sectors:
       - "港口航运"
+      - "物流"
     sentiment: "neutral"
+    theme_type: "cycle"
+    base_weight: 1.0
 
-  # 事件驱动类
+  煤炭:
+    keywords:
+      - "煤炭"
+      - "动力煤"
+      - "焦煤"
+      - "煤价"
+      - "煤炭进口"
+      - "澳煤"
+    related_sectors:
+      - "煤炭开采"
+      - "电力"
+    sentiment: "neutral"
+    theme_type: "cycle"
+    base_weight: 0.9
+
+  黄金:
+    keywords:
+      - "黄金"
+      - "金价"
+      - "伦敦金"
+      - "COMEX"
+      - "央行购金"
+      - "黄金储备"
+    related_sectors:
+      - "贵金属"
+      - "珠宝首饰"
+    sentiment: "neutral"
+    theme_type: "cycle"
+    base_weight: 1.0
+
+  # ═══════════════════════════════════════════════════════════════
+  # 地缘政治类 - 国际冲突驱动
+  # ═══════════════════════════════════════════════════════════════
+
+  美伊战争:
+    keywords:
+      - "美伊战争"
+      - "伊朗战争"
+      - "伊朗冲突"
+      - "霍尔木兹"
+      - "波斯湾战争"
+      - "中东冲突"
+      - "史诗狂怒"
+    related_sectors:
+      - "石油"
+      - "军工"
+      - "黄金"
+      - "航运"
+    sentiment: "negative"
+    theme_type: "event"
+    base_weight: 1.5
+
+  油价:
+    keywords:
+      - "油价"
+      - "原油"
+      - "石油"
+      - "布伦特"
+      - "WTI原油"
+      - "原油价格"
+    related_sectors:
+      - "石油开采"
+      - "油气服务"
+      - "化工"
+    sentiment: "neutral"
+    theme_type: "cycle"
+    base_weight: 1.2
+
+  石油股:
+    keywords:
+      - "石油股"
+      - "油气板块"
+      - "石油开采"
+      - "中国石油"
+      - "中国石化"
+      - "中海油"
+    related_sectors:
+      - "石油开采"
+      - "油气服务"
+    sentiment: "positive"
+    theme_type: "cycle"
+    base_weight: 1.1
+
+  光伏:
+    keywords:
+      - "光伏"
+      - "太阳能"
+      - "光伏板块"
+      - "光伏发电"
+    related_sectors:
+      - "新能源"
+      - "电力设备"
+    sentiment: "positive"
+    theme_type: "cycle"
+    base_weight: 1.0
+
+  储能:
+    keywords:
+      - "储能"
+      - "储能板块"
+      - "电化学储能"
+      - "新型储能"
+    related_sectors:
+      - "新能源"
+      - "电池"
+    sentiment: "positive"
+    theme_type: "cycle"
+    base_weight: 1.0
+
+  # ═══════════════════════════════════════════════════════════════
+  # 事件驱动类 - 产品发布/重大事件
+  # ═══════════════════════════════════════════════════════════════
+
   苹果产业链:
     keywords:
       - "苹果产业链"
       - "iPhone"
       - "Apple"
-      - "WWDC"
       - "苹果发布会"
+      - "WWDC"
+      - "iPhone发布"
+      - "Vision Pro"
     related_sectors:
       - "消费电子"
-      - "苹果概念"
+      - "苹果供应商"
     sentiment: "positive"
+    theme_type: "event"
+    base_weight: 1.1
 
   华为产业链:
     keywords:
       - "华为"
+      - "华为产业链"
       - "鸿蒙"
       - "Mate"
       - "麒麟芯片"
-      - "华为发布会"
+      - "昇腾"
+      - "鲲鹏"
     related_sectors:
+      - "通信设备"
       - "消费电子"
-      - "国产替代"
+      - "半导体"
     sentiment: "positive"
+    theme_type: "event"
+    base_weight: 1.2
 
   特斯拉:
     keywords:
       - "特斯拉"
       - "Tesla"
-      - "4680电池"
+      - "Model Y"
       - "FSD"
-      - "人形机器人"
+      - "Robotaxi"
+      - "Optimus"
+      - "4680电池"
     related_sectors:
       - "新能源汽车"
-      - "锂电池"
+      - "自动驾驶"
     sentiment: "positive"
+    theme_type: "event"
+    base_weight: 1.1
 
-# 催化剂关键词（用于识别题材触发事件）
-catalyst_keywords:
-  # 政策催化剂
-  policy:
-    - "政策出台"
-    - "政策支持"
-    - "补贴"
-    - "专项资金"
-    - "试点"
-    - "示范区"
-    - "推广"
-    - "国家标准"
-    - "行业标准"
-    - "十四五"
-    - "规划"
-    - "纲要"
-    - "意见"
-    - "通知"
-    - "复函"
+  # ═══════════════════════════════════════════════════════════════
+  # 新增题材
+  # ═══════════════════════════════════════════════════════════════
 
-  # 商业化催化剂
-  commercial:
-    - "量产"
-    - "量产交付"
-    - "商业化"
-    - "规模化"
-    - "订单"
-    - "签约"
-    - "发布"
-    - "新品发布"
-    - "产品发布"
-    - "上市"
-    - "发售"
+  AI应用:
+    keywords:
+      - "AI应用"
+      - "AI落地"
+      - "AI商业化"
+      - "AI+行业"
+      - "垂直AI"
+      - "AI解决方案"
+    related_sectors:
+      - "软件服务"
+      - "AI"
+    sentiment: "positive"
+    theme_type: "technology"
+    base_weight: 1.2
 
-  # 技术催化剂
-  technology:
-    - "技术突破"
-    - "研发成功"
-    - "全球首款"
-    - "世界领先"
-    - "首次"
-    - "独家"
-    - "专利"
-    - "认证"
-    - "检测通过"
+  算力:
+    keywords:
+      - "算力"
+      - "算力租赁"
+      - "GPU"
+      - "AI服务器"
+      - "H100"
+      - "A100"
+      - "算力基础设施"
+      - "智算中心"
+    related_sectors:
+      - "AI芯片"
+      - "服务器"
+      - "数据中心"
+    sentiment: "positive"
+    theme_type: "technology"
+    base_weight: 1.3
 
-  # 会议/事件催化剂
-  event:
-    - "发布会"
-    - "峰会"
-    - "论坛"
-    - "博览会"
-    - "交易会"
-    - "广交会"
-    - "进博会"
-    - "CES"
-    - "MWC"
-    - "数贸会"
+  存储芯片:
+    keywords:
+      - "存储芯片"
+      - "HBM"
+      - "DRAM"
+      - "NAND"
+      - "长江存储"
+      - "三星存储"
+      - "存储涨价"
+    related_sectors:
+      - "半导体"
+      - "存储"
+    sentiment: "positive"
+    theme_type: "cycle"
+    base_weight: 1.1
 
-# 龙头股识别关键词
-leader_keywords:
-  - "龙头"
-  - "龙头股"
-  - "行业龙头"
-  - "市场龙头"
-  - "龙头标的"
-  - "核心标的"
-  - "首选"
-  - "领涨"
-  - "涨幅领先"
+  汽车智能座舱:
+    keywords:
+      - "智能座舱"
+      - "车载系统"
+      - "车机"
+      - "车载显示"
+      - "HUD"
+      - "抬头显示"
+      - "汽车电子"
+    related_sectors:
+      - "汽车电子"
+      - "消费电子"
+    sentiment: "positive"
+    theme_type: "technology"
+    base_weight: 1.0
 
-# 风险关键词（用于识别风险）
-risk_keywords:
+  车路云:
+    keywords:
+      - "车路云"
+      - "智能网联"
+      - "车联网"
+      - "V2X"
+      - "路侧单元"
+      - "车路协同"
+    related_sectors:
+      - "智能驾驶"
+      - "通信"
+      - "交通"
+    sentiment: "positive"
+    theme_type: "policy"
+    base_weight: 1.1
+
+# ═══════════════════════════════════════════════════════════════
+# 题材关联度权重 - 用于评估股票与题材的关系强度
+# ═══════════════════════════════════════════════════════════════
+
+theme_relevance_weights:
+  # 核心受益（直接参与、技术领先、市占率高）
+  core:
+    weight: 1.0
+    keywords:
+      - "龙头企业"
+      - "行业龙头"
+      - "核心技术"
+      - "主要供应商"
+      - "核心标的"
+      - "直接受益"
+
+  # 中度受益（有一定关联、弹性较大）
+  medium:
+    weight: 0.7
+    keywords:
+      - "供应商"
+      - "合作"
+      - "涉及"
+      - "布局"
+      - "相关"
+
+  # 边缘关联（名称沾边、纯炒作）
+  marginal:
+    weight: 0.3
+    keywords:
+      - "沾边"
+      - "涉及"
+      - "可能受益"
+      - "待确认"
+
+# ═══════════════════════════════════════════════════════════════
+# 负面关键词过滤 - 包含这些关键词的新闻将降低权重或排除
+# ═══════════════════════════════════════════════════════════════
+
+negative_filters:
   - "减持"
-  - "解禁"
+  - "退市"
+  - "ST"
+  - "爆雷"
+  - "造假"
+  - "欺诈"
+  - "违规"
+  - "处罚"
+  - "立案"
+  - "问询"
+  - "澄清"
+  - "否认"
   - "业绩亏损"
-  - "商誉减值"
-  - "监管函"
-  - "问询函"
-  - "立案调查"
-  - "诉讼"
-  - "债务违约"
-  - "资金链紧张"
-  - "产能过剩"
-  - "价格战"
+  - "大幅亏损"
+
+# ═══════════════════════════════════════════════════════════════
+# 催化剂关键词配置
+# ═══════════════════════════════════════════════════════════════
+
+catalyst_keywords:
+  # 政策类催化剂
+  policy:
+    - "国务院"
+    - "发改委"
+    - "工信部"
+    - "财政部"
+    - "证监会"
+    - "银保监会"
+    - "政策出台"
+    - "政策发布"
+    - "规划发布"
+    - "指导意见"
+    - "通知"
+    - "实施方案"
+
+  # 产品类催化剂
+  product:
+    - "发布"
+    - "发布会的"
+    - "上市"
+    - "预售"
+    - "首发"
+    - "亮相"
+    - "上市"
+
+  # 技术类催化剂
+  technology:
+    - "量产"
+    - "量产"
+    - "突破"
+    - "成功"
+    - "验收"
+    - "下线"
+    - "交付"
+
+  # 业绩类催化剂
+  performance:
+    - "财报"
+    - "业绩"
+    - "超预期"
+    - "增长"
+    - "盈利"
+    - "营收"
+
+# ═══════════════════════════════════════════════════════════════
+# 新闻来源权威性评分
+# ═══════════════════════════════════════════════════════════════
+
+source_authority:
+  # 官方媒体
+  official:
+    score: 1.0
+    sources:
+      - "新华社"
+      - "人民日报"
+      - "央视"
+      - "央视新闻"
+      - "中国政府网"
+      - "国务院"
+      - "发改委官网"
+      - "工信部官网"
+
+  # 权威财经媒体
+  authoritative_finance:
+    score: 0.9
+    sources:
+      - "上海证券报"
+      - "中国证券报"
+      - "证券时报"
+      - "证券日报"
+      - "第一财经"
+      - "财新"
+      - "经济观察报"
+      - "21世纪经济报道"
+
+  # 专业财经媒体
+  professional_finance:
+    score: 0.8
+    sources:
+      - "东方财富网"
+      - "同花顺"
+      - "雪球"
+      - "Wind"
+      - "彭博"
+      - "路透"
+      - "36氪"
+      - "钛媒体"
+
+  # 行业媒体
+  industry:
+    score: 0.7
+    sources:
+      - "汽车之家"
+      - "盖世汽车"
+      - "OFweek"
+      - "高工锂电"
+      - "芯智讯"
+
+  # 自媒体
+  self_media:
+    score: 0.5
+    sources:
+      - "微博"
+      - "微信公众号"
+      - "雪球号"
+      - "今日头条"
+
+# ═══════════════════════════════════════════════════════════════
+# 政策级别评分
+# ═══════════════════════════════════════════════════════════════
+
+policy_level_scores:
+  国务院:
+    score: 100
+    weight: 1.0
+    sources:
+      - "国务院"
+      - "国务院常务会议"
+      - "国务院办公厅"
+
+  部委联合:
+    score: 85
+    weight: 0.9
+    sources:
+      - "发改委"
+      - "工信部"
+      - "财政部"
+      - "证监会"
+      - "银保监会"
+      - "科技部"
+      - "商务部"
+
+  单一部委:
+    score: 70
+    weight: 0.8
+    sources:
+      - "国务院各部委"
+
+  地方政府:
+    score: 50
+    weight: 0.6
+    sources:
+      - "地方政府"
+      - "省级"
+      - "市级"

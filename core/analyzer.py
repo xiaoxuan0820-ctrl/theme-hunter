@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-题材分析引擎
+Theme Analyzer - 题材分析引擎（升级版）
 从新闻中提取、分析题材，判断题材阶段和催化剂
+新增：可信度评估、风险评估、资金追踪
 """
 
 import os
@@ -41,9 +42,9 @@ class ThemeStage(Enum):
         return descriptions.get(self.value, self.value)
     
     @property
-    def color(self) -> str:
-        """阶段颜色（用于Telegram消息）"""
-        colors = {
+    def emoji(self) -> str:
+        """阶段emoji"""
+        emojis = {
             "unknown": "⚪",
             "germination": "🟢",
             "eruption": "🔵",
@@ -51,7 +52,7 @@ class ThemeStage(Enum):
             "cooldown": "🟠",
             "dead": "🔴",
         }
-        return colors.get(self.value, "⚪")
+        return emojis.get(self.value, "⚪")
 
 
 @dataclass
@@ -63,6 +64,11 @@ class Catalyst:
     expected_date: datetime      # 预期时间
     confidence: float = 0.5      # 置信度 0-1
     impact_level: str = "medium" # 影响级别: high, medium, low
+    
+    # 新增字段
+    catalyst_level: str = "medium"  # 催化剂级别: 短期(1-7天), 中期(1-4周), 长期(1-6月)
+    source_count: int = 1         # 来源数量
+    cross_validated: bool = False  # 是否多源验证
     
     def days_until(self) -> int:
         """距离催化剂的天数"""
@@ -77,12 +83,57 @@ class Catalyst:
 
 
 @dataclass
+class CredibilityAssessment:
+    """可信度评估"""
+    total_score: float            # 总分 0-100
+    
+    # 各维度得分
+    policy_level_score: float    # 政策级别得分
+    media_authority_score: float # 媒体权威性得分
+    consistency_score: float     # 信息一致性得分
+    freshness_score: float       # 时效性得分
+    
+    # 详细评估
+    policy_level: str = ""       # 政策级别描述
+    media_sources: List[str] = field(default_factory=list)  # 媒体来源
+    validation_count: int = 0    # 验证来源数量
+    
+    def get_stars(self) -> str:
+        """获取星级评分"""
+        stars = int(self.total_score / 20)
+        return "⭐" * min(stars, 5)
+
+
+@dataclass
+class RiskAssessment:
+    """风险评估"""
+    risk_level: str              # low/medium/high
+    risk_score: float            # 风险得分 0-100
+    
+    # 各项指标
+    trading_days: int = 0        # 已炒作天数
+    leader_return: float = 0     # 龙头涨幅%
+    capital_divergence: float = 0  # 资金分化程度
+    sentiment_turning_point: bool = False  # 舆论热度拐点
+    
+    # 风险详情
+    risk_factors: List[str] = field(default_factory=list)
+    warnings: List[str] = field(default_factory=list)
+    
+    def get_stars(self) -> str:
+        """获取星级评分"""
+        risk_stars = {5: "低风险 ⭐⭐⭐⭐⭐", 4: "较低风险 ⭐⭐⭐⭐", 
+                     3: "中等风险 ⭐⭐⭐", 2: "较高风险 ⭐⭐", 1: "高风险 ⭐"}
+        return risk_stars.get(min(self.risk_score // 20, 5), "未知")
+
+
+@dataclass
 class Theme:
     """题材数据模型"""
     name: str                    # 题材名称
     keywords: List[str]          # 关键词
-    related_sectors: List[str]  # 相关板块
-    sentiment: str = "positive"  # 情绪: positive, negative, neutral
+    related_sectors: List[str]   # 相关板块
+    sentiment: str = "positive"   # 情绪: positive, negative, neutral
     
     # 分析结果
     stage: ThemeStage = ThemeStage.UNKNOWN
@@ -91,8 +142,12 @@ class Theme:
     heat_score: float = 0.0    # 热度得分 0-100
     confidence: float = 0.0     # 置信度 0-1
     
+    # 新增评估
+    credibility: CredibilityAssessment = None  # 可信度评估
+    risk: RiskAssessment = None              # 风险评估
+    
     # 龙头股信息
-    leader_stocks: List[str] = field(default_factory=list)  # 股票代码列表
+    leader_stocks: List[str] = field(default_factory=list)
     following_stocks: List[str] = field(default_factory=list)
     
     # 时间信息
@@ -100,8 +155,11 @@ class Theme:
     last_update: datetime = field(default_factory=datetime.now)
     
     # 元信息
-    sources: List[str] = field(default_factory=list)  # 新闻来源
-    related_news: List[str] = field(default_factory=list)  # 相关新闻ID
+    sources: List[str] = field(default_factory=list)
+    related_news: List[str] = field(default_factory=list)
+    
+    # 题材类型
+    theme_type: str = ""         # technology/policy/event/cycle
     
     def to_dict(self) -> Dict:
         """转换为字典"""
@@ -111,6 +169,10 @@ class Theme:
         if self.first_appearance:
             d['first_appearance'] = self.first_appearance.isoformat()
         d['last_update'] = self.last_update.isoformat()
+        if self.credibility:
+            d['credibility'] = asdict(self.credibility)
+        if self.risk:
+            d['risk'] = asdict(self.risk)
         return d
     
     @classmethod
@@ -130,6 +192,14 @@ class Theme:
                 catalysts.append(c)
         d['catalysts'] = catalysts
         
+        # 可信度评估
+        if d.get('credibility'):
+            d['credibility'] = CredibilityAssessment(**d['credibility'])
+        
+        # 风险评估
+        if d.get('risk'):
+            d['risk'] = RiskAssessment(**d['risk'])
+        
         return cls(**{k: v for k, v in d.items() if k in cls.__dataclass_fields__})
 
 
@@ -142,14 +212,39 @@ class ThemeAnalyzer:
     - 判断题材阶段
     - 识别催化剂和时间点
     - 计算热度得分
+    - 评估可信度
+    - 评估风险
     """
+    
+    # 来源权威性配置
+    SOURCE_AUTHORITY = {
+        'official': ['新华社', '人民日报', '央视', '中国政府网'],  # 1.0
+        'authoritative': ['上海证券报', '中国证券报', '证券时报', '第一财经'],  # 0.9
+        'professional': ['东方财富网', '同花顺', '雪球', 'Wind'],  # 0.8
+        'industry': ['汽车之家', '盖世汽车', 'OFweek'],  # 0.7
+        'self_media': ['微博', '微信公众号', '今日头条'],  # 0.5
+    }
+    
+    # 政策级别配置
+    POLICY_LEVEL_SCORES = {
+        '国务院': 100, '发改委': 85, '工信部': 80, '财政部': 80,
+        '证监会': 75, '银保监会': 75, '科技部': 70, '地方政府': 50
+    }
+    
+    # 风险关键词
+    RISK_KEYWORDS = [
+        '减持', '退市', 'ST', '爆雷', '造假', '欺诈', '违规',
+        '处罚', '立案', '问询', '澄清', '否认', '业绩亏损'
+    ]
+    
+    # 炒作预警关键词
+    SPECULATION_KEYWORDS = [
+        '妖股', '连板', '疯狂', '炒作', '全民', '接棒', '补涨'
+    ]
     
     def __init__(self, keywords_path: str = None):
         """
         初始化分析器
-        
-        Args:
-            keywords_path: 关键词配置文件路径
         """
         self.logger = logging.getLogger(self.__class__.__name__)
         
@@ -162,6 +257,7 @@ class ThemeAnalyzer:
         
         self.theme_keywords = self.keywords_config.get('theme_keywords', {})
         self.catalyst_keywords = self.keywords_config.get('catalyst_keywords', {})
+        self.source_authority = self.keywords_config.get('source_authority', {})
         
         # 题材记录存储
         self.themes_dir = Path(__file__).parent.parent / "data" / "themes"
@@ -194,12 +290,6 @@ class ThemeAnalyzer:
     def extract_themes(self, news_list: List[Any]) -> List[Theme]:
         """
         从新闻列表中提取题材
-        
-        Args:
-            news_list: 新闻列表
-            
-        Returns:
-            提取到的题材列表
         """
         # 按题材分组统计
         theme_news: Dict[str, List] = {name: [] for name in self.theme_keywords.keys()}
@@ -256,6 +346,7 @@ class ThemeAnalyzer:
                 sentiment=config.get('sentiment', 'positive'),
                 news_count=len(news_list),
                 first_appearance=datetime.now(),
+                theme_type=config.get('theme_type', 'general')
             )
             
             for news in news_list:
@@ -273,6 +364,12 @@ class ThemeAnalyzer:
         # 识别催化剂
         theme.catalysts = self.find_catalyst(theme, news_list)
         
+        # 新增：可信度评估
+        theme.credibility = self.assess_credibility(name, news_list)
+        
+        # 新增：风险评估
+        theme.risk = self.assess_risk(theme, news_list)
+        
         # 保存
         self.known_themes[name] = theme
         self._save_theme(theme)
@@ -288,6 +385,7 @@ class ThemeAnalyzer:
         - 新闻时效性
         - 来源权重
         - 催化剂强度
+        - 可信度加成
         """
         base_score = min(theme.news_count * 5, 40)  # 基础分，最多40分
         
@@ -298,302 +396,314 @@ class ThemeAnalyzer:
                 age_hours = (datetime.now() - news.publish_time).total_seconds() / 3600
                 if age_hours < 24:
                     recent_count += 1
-        recency_score = min(recent_count * 8, 30)  # 时效分，最多30分
+                    if age_hours < 6:
+                        base_score += 5
+                    elif age_hours < 12:
+                        base_score += 3
+                    elif age_hours < 24:
+                        base_score += 1
         
-        # 来源权重分
-        source_weights = {
-            '财联社电报': 3,
-            '同花顺资讯': 2,
-            '东方财富': 2,
-            '证券时报': 2,
-            '第一财经': 1.5,
-            '新浪财经': 1,
-            '中国政府网': 3,
-            '发改委': 3,
-            '工信部': 3,
-        }
-        
-        source_score = 0
+        # 来源权重加成
+        authority_bonus = 0
         for news in news_list:
             if hasattr(news, 'source'):
-                weight = source_weights.get(news.source, 1)
-                source_score += weight * 2
-        source_score = min(source_score, 15)  # 来源分，最多15分
+                authority_bonus += self._get_source_authority(news.source)
+        base_score += min(authority_bonus / len(news_list) * 10, 20) if news_list else 0
         
-        # 催化剂分
-        catalyst_score = min(len(theme.catalysts) * 5, 15)  # 催化剂分，最多15分
+        # 催化剂加成
+        if theme.catalysts:
+            catalyst_bonus = sum(
+                c.confidence * 10 * (2 if c.impact_level == 'high' else 1)
+                for c in theme.catalysts
+            )
+            base_score += min(catalyst_bonus, 20)
         
-        total_score = base_score + recency_score + source_score + catalyst_score
-        return min(total_score, 100)
+        # 可信度加成
+        if theme.credibility:
+            base_score += theme.credibility.total_score * 0.1
+        
+        return min(base_score, 100)
+    
+    def _get_source_authority(self, source: str) -> float:
+        """获取来源权威性得分"""
+        source_lower = source.lower()
+        
+        for category, sources in self.SOURCE_AUTHORITY.items():
+            for s in sources:
+                if s in source:
+                    scores = {'official': 1.0, 'authoritative': 0.9, 
+                             'professional': 0.8, 'industry': 0.7, 'self_media': 0.5}
+                    return scores.get(category, 0.5)
+        
+        return 0.5
     
     def classify_stage(self, theme: Theme) -> ThemeStage:
         """
         判断题材阶段
         
-        阶段判断依据：
-        - 萌芽期：首次出现，新闻量少
-        - 爆发期：新闻量快速增加，多源报道
-        - 炒作期：相关股票涨停，出现概念炒作
-        - 退潮期：新闻量下降，热度降低
-        - 消亡期：长时间无相关新闻
+        萌芽期: 首次出现、技术突破、新产品
+        爆发期: 涨停、暴涨、大量报道
+        炒作期: 连板、妖股、全民炒股
+        退潮期: 回落、分化、滞涨
+        消亡期: 证伪、过时
         """
-        if theme.news_count == 0:
-            return ThemeStage.UNKNOWN
-        
-        now = datetime.now()
-        
-        # 判断是否为新题材
-        if theme.first_appearance:
-            days_since_first = (now - theme.first_appearance).days
-            
-            if days_since_first <= 3:
-                # 3天内的新题材
-                if theme.news_count >= 5:
-                    return ThemeStage.ERUPTION
-                else:
-                    return ThemeStage.GERMINATION
-            elif days_since_first <= 7:
-                # 一周内的题材
-                if theme.heat_score >= 70:
-                    return ThemeStage.SPECULATION
-                else:
-                    return ThemeStage.ERUPTION
-            elif days_since_first <= 14:
-                # 两周内的题材
-                if theme.heat_score >= 60:
-                    return ThemeStage.SPECULATION
-                else:
-                    return ThemeStage.COOLDOWN
-            else:
-                # 超过两周
-                if theme.heat_score >= 50:
-                    return ThemeStage.COOLDOWN
-                else:
-                    return ThemeStage.DEAD
-        
-        # 无首次出现时间
-        if theme.news_count <= 3:
-            return ThemeStage.GERMINATION
-        elif theme.news_count <= 10:
-            return ThemeStage.ERUPTION
-        elif theme.heat_score >= 70:
-            return ThemeStage.SPECULATION
+        # 获取新闻文本
+        theme_file = self.themes_dir / f"{theme.name}.json"
+        if theme_file.exists():
+            try:
+                with open(theme_file, 'r', encoding='utf-8') as f:
+                    old_data = json.load(f)
+            except:
+                old_data = {}
         else:
-            return ThemeStage.COOLDOWN
+            old_data = {}
+        
+        # 判断逻辑
+        if theme.news_count <= 3 and theme.first_appearance:
+            days_since = (datetime.now() - theme.first_appearance).days
+            if days_since <= 3:
+                return ThemeStage.GERMINATION
+        
+        # 检查关键词
+        keywords_text = " ".join(theme.keywords)
+        
+        germination_kw = ['首次', '突破', '首款', '首创', '新产品']
+        eruption_kw = ['涨停', '暴涨', '爆发', '引爆', '全民']
+        speculation_kw = ['妖股', '连板', '疯狂', '炒作', '补涨']
+        cooldown_kw = ['回落', '回调', '分化', '退潮', '滞涨']
+        dead_kw = ['消亡', '过时', '证伪', '否认', '澄清']
+        
+        # 阶段判断
+        for kw in dead_kw:
+            if kw in keywords_text:
+                return ThemeStage.DEAD
+        
+        for kw in cooldown_kw:
+            if kw in keywords_text:
+                return ThemeStage.COOLDOWN
+        
+        for kw in speculation_kw:
+            if kw in keywords_text:
+                return ThemeStage.SPECULATION
+        
+        for kw in eruption_kw:
+            if kw in keywords_text:
+                return ThemeStage.ERUPTION
+        
+        for kw in germination_kw:
+            if kw in keywords_text:
+                return ThemeStage.GERMINATION
+        
+        # 基于时间的默认判断
+        if theme.news_count < 5:
+            return ThemeStage.GERMINATION
+        elif theme.news_count < 20:
+            return ThemeStage.ERUPTION
+        else:
+            return ThemeStage.SPECULATION
     
     def find_catalyst(self, theme: Theme, news_list: List[Any]) -> List[Catalyst]:
-        """
-        从新闻中识别催化剂
-        
-        Args:
-            theme: 题材
-            news_list: 相关新闻列表
-            
-        Returns:
-            催化剂列表
-        """
+        """识别催化剂"""
         catalysts = []
-        existing_titles = {c.title for c in theme.catalysts}
+        text = " ".join(f"{news.title} {news.content}" for news in news_list)
         
-        # 合并所有催化剂关键词
-        all_catalyst_keywords = []
-        for category, keywords in self.catalyst_keywords.items():
-            all_catalyst_keywords.extend(keywords)
-        
-        for news in news_list:
-            text = f"{news.title} {news.content}"
-            
-            # 检查是否包含催化剂关键词
-            for kw in all_catalyst_keywords:
-                if kw in text:
-                    catalyst_type = self._identify_catalyst_type(text)
-                    expected_date = self._extract_date(text, news.publish_time)
-                    
-                    # 避免重复
-                    title = self._generate_catalyst_title(news, kw)
-                    if title not in existing_titles:
-                        catalyst = Catalyst(
-                            type=catalyst_type,
-                            title=title,
-                            description=text[:200],
-                            expected_date=expected_date,
-                            confidence=0.6,
-                            impact_level=self._estimate_impact(text)
-                        )
-                        catalysts.append(catalyst)
-                        existing_titles.add(title)
-                    break
-        
-        return catalysts
-    
-    def _identify_catalyst_type(self, text: str) -> str:
-        """识别催化剂类型"""
-        policy_keywords = ['政策', '国务院', '发改委', '工信部', '标准', '规划', '通知']
-        commercial_keywords = ['发布', '上市', '量产', '订单', '签约', '量产']
-        technology_keywords = ['突破', '研发', '首款', '首创', '技术']
-        event_keywords = ['峰会', '论坛', '博览会', '发布会', '展会', '会议']
-        
+        # 政策类催化剂
+        policy_keywords = ['国务院', '发改委', '工信部', '财政部', '政策', '规划', '意见']
         for kw in policy_keywords:
             if kw in text:
-                return 'policy'
-        for kw in commercial_keywords:
+                catalysts.append(Catalyst(
+                    type='policy',
+                    title=f"政策催化剂：{kw}",
+                    description="政策发布预期",
+                    expected_date=datetime.now() + timedelta(days=random.randint(7, 30)),
+                    confidence=0.8,
+                    impact_level='high',
+                    catalyst_level='中期'
+                ))
+                break
+        
+        # 产品类催化剂
+        product_keywords = ['发布', '发布会', '上市', '预售', '首发']
+        for kw in product_keywords:
             if kw in text:
-                return 'commercial'
-        for kw in technology_keywords:
+                catalysts.append(Catalyst(
+                    type='product',
+                    title=f"产品催化剂：{kw}",
+                    description="产品发布预期",
+                    expected_date=datetime.now() + timedelta(days=random.randint(1, 14)),
+                    confidence=0.7,
+                    impact_level='medium',
+                    catalyst_level='短期'
+                ))
+                break
+        
+        # 技术类催化剂
+        tech_keywords = ['量产', '突破', '测试', '验证']
+        for kw in tech_keywords:
             if kw in text:
-                return 'technology'
-        for kw in event_keywords:
-            if kw in text:
-                return 'event'
+                catalysts.append(Catalyst(
+                    type='technology',
+                    title=f"技术催化剂：{kw}",
+                    description="技术进展预期",
+                    expected_date=datetime.now() + timedelta(days=random.randint(30, 90)),
+                    confidence=0.6,
+                    impact_level='medium',
+                    catalyst_level='长期'
+                ))
+                break
         
-        return 'unknown'
+        return catalysts[:3]  # 最多返回3个催化剂
     
-    def _extract_date(self, text: str, default_date: datetime) -> datetime:
-        """从文本中提取日期"""
-        # 日期模式
-        date_patterns = [
-            r'(\d{4})年(\d{1,2})月(\d{1,2})日',
-            r'(\d{4})-(\d{1,2})-(\d{1,2})',
-            r'(\d{1,2})/(\d{1,2})',
-        ]
+    def assess_credibility(self, theme_name: str, news_list: List[Any]) -> CredibilityAssessment:
+        """评估题材可信度"""
+        text = " ".join(f"{news.title} {news.content}" for news in news_list)
         
-        for pattern in date_patterns:
-            match = re.search(pattern, text)
-            if match:
-                try:
-                    if len(match.groups()) == 3:
-                        year, month, day = match.groups()
-                        if len(year) == 4:
-                            return datetime(int(year), int(month), int(day))
-                        else:
-                            # 假设是今年
-                            now = datetime.now()
-                            return datetime(now.year, int(year), int(month))
-                except ValueError:
-                    continue
+        # 政策级别得分
+        policy_score = 50
+        for level, score in self.POLICY_LEVEL_SCORES.items():
+            if level in text:
+                policy_score = max(policy_score, score)
+                break
         
-        # 返回默认日期+7天（假设一周后）
-        return default_date + timedelta(days=7)
+        # 媒体权威性得分
+        authority_scores = []
+        for news in news_list:
+            authority_scores.append(self._get_source_authority(getattr(news, 'source', '')))
+        media_score = sum(authority_scores) / len(authority_scores) * 100 if authority_scores else 50
+        
+        # 信息一致性得分（多源验证）
+        sources = [getattr(news, 'source', '') for news in news_list]
+        unique_sources = len(set(s for s in sources if s))
+        consistency_score = min(unique_sources * 20, 100)
+        
+        # 时效性得分
+        freshness_score = 50
+        for news in news_list:
+            if hasattr(news, 'publish_time'):
+                age_hours = (datetime.now() - news.publish_time).total_seconds() / 3600
+                if age_hours < 24:
+                    freshness_score = 100
+                elif age_hours < 72:
+                    freshness_score = 75
+                elif age_hours < 168:
+                    freshness_score = 50
+                break
+        
+        # 总分
+        total_score = (policy_score * 0.4 + media_score * 0.3 + 
+                      consistency_score * 0.15 + freshness_score * 0.15)
+        
+        return CredibilityAssessment(
+            total_score=total_score,
+            policy_level_score=policy_score,
+            media_authority_score=media_score,
+            consistency_score=consistency_score,
+            freshness_score=freshness_score,
+            policy_level=self._get_policy_level_text(policy_score),
+            media_sources=list(set(sources))[:5],
+            validation_count=unique_sources
+        )
     
-    def _generate_catalyst_title(self, news: Any, keyword: str) -> str:
-        """生成催化剂标题"""
-        title = news.title if hasattr(news, 'title') else str(news)
-        return f"{keyword}: {title[:50]}"
+    def _get_policy_level_text(self, score: float) -> str:
+        """获取政策级别文本"""
+        if score >= 90:
+            return "国家级（国务院）"
+        elif score >= 75:
+            return "部委级"
+        elif score >= 60:
+            return "地方级"
+        else:
+            return "未明确"
     
-    def _estimate_impact(self, text: str) -> str:
-        """估计影响级别"""
-        high_impact = ['重磅', '重大', '国家级', '全球', '首创', '颠覆']
-        medium_impact = ['重要', '试点', '推广', '扩大']
+    def assess_risk(self, theme: Theme, news_list: List[Any]) -> RiskAssessment:
+        """评估题材风险"""
+        text = " ".join(f"{news.title} {news.content}" for news in news_list)
         
-        for kw in high_impact:
-            if kw in text:
-                return 'high'
-        for kw in medium_impact:
-            if kw in text:
-                return 'medium'
-        return 'low'
+        # 已炒作天数
+        trading_days = 0
+        if theme.first_appearance:
+            trading_days = (datetime.now() - theme.first_appearance).days
+        
+        # 龙头涨幅（从新闻中提取）
+        leader_return = 0
+        numbers = re.findall(r'(\d+(?:\.\d+)?)%', text)
+        for num_str in numbers:
+            try:
+                num = float(num_str)
+                if 0 < num <= 50:
+                    leader_return = max(leader_return, num)
+            except:
+                pass
+        
+        # 资金分化程度
+        divergence = 0
+        if any(kw in text for kw in ['分化', '个股涨跌不一', '严重分化']):
+            divergence = 0.7
+        elif any(kw in text for kw in ['回落', '回调', '炸板']):
+            divergence = 0.8
+        
+        # 舆论热度拐点
+        turning_point = any(kw in text for kw in ['回落', '退潮', '滞涨', '降温', '监管'])
+        
+        # 风险因素
+        risk_factors = []
+        for risk_kw in self.RISK_KEYWORDS:
+            if risk_kw in text:
+                risk_factors.append(risk_kw)
+        
+        # 风险等级
+        risk_score = 50
+        if trading_days > 30:
+            risk_score += 20
+        elif trading_days > 14:
+            risk_score += 10
+        
+        if leader_return > 30:
+            risk_score += 20
+        elif leader_return > 15:
+            risk_score += 10
+        
+        if divergence > 0.5:
+            risk_score += 15
+        
+        if turning_point:
+            risk_score += 20
+        
+        risk_score = min(risk_score, 100)
+        
+        # 风险级别
+        if risk_score < 35:
+            risk_level = "low"
+        elif risk_score < 60:
+            risk_level = "medium"
+        else:
+            risk_level = "high"
+        
+        # 预警信息
+        warnings = []
+        if risk_level == "high":
+            warnings.append("⚠️ 高风险，注意止损")
+        if divergence > 0.5:
+            warnings.append("⚠️ 资金出现分化")
+        if turning_point:
+            warnings.append("⚠️ 热度出现拐点信号")
+        if leader_return > 30:
+            warnings.append("⚠️ 龙头涨幅过大，注意回调风险")
+        
+        return RiskAssessment(
+            risk_level=risk_level,
+            risk_score=risk_score,
+            trading_days=trading_days,
+            leader_return=leader_return,
+            capital_divergence=divergence,
+            sentiment_turning_point=turning_point,
+            risk_factors=risk_factors,
+            warnings=warnings
+        )
     
-    def analyze_news_sentiment(self, news_list: List[Any]) -> Dict[str, float]:
-        """
-        分析新闻情绪
-        
-        Returns:
-            {题材名: 情绪值(-1到1)}
-        """
-        sentiments = {}
-        
-        for theme_name, config in self.theme_keywords.items():
-            related_news = []
-            keywords = config.get('keywords', [])
-            
-            for news in news_list:
-                text = f"{news.title} {news.content}".lower()
-                for kw in keywords:
-                    if kw.lower() in text:
-                        related_news.append(news)
-                        break
-            
-            if related_news:
-                # 简单情绪分析
-                positive_words = ['利好', '突破', '大涨', '爆发', '增长', '创新', '领先']
-                negative_words = ['利空', '下跌', '风险', '亏损', '问题', '违规']
-                
-                score = 0
-                for news in related_news:
-                    text = f"{news.title} {news.content}"
-                    for pw in positive_words:
-                        if pw in text:
-                            score += 1
-                    for nw in negative_words:
-                        if nw in text:
-                            score -= 1
-                
-                sentiments[theme_name] = score / max(len(related_news), 1)
-        
-        return sentiments
-    
-    def get_theme_summary(self, theme: Theme) -> str:
-        """生成题材摘要"""
-        stage = theme.stage
-        
-        summary_parts = [
-            f"📊 题材: {theme.name}",
-            f"📍 阶段: {stage.color}{stage.description}",
-            f"🔥 热度: {theme.heat_score:.0f}",
-            f"📰 新闻: {theme.news_count}条",
-        ]
-        
-        if theme.catalysts:
-            summary_parts.append("⏰ 催化剂:")
-            for cat in theme.catalysts[:3]:
-                days = cat.days_until()
-                date_str = cat.expected_date.strftime("%m-%d")
-                summary_parts.append(f"  • {cat.title[:30]} ({date_str}, {days}天后)")
-        
-        if theme.leader_stocks:
-            summary_parts.append(f"🐉 龙头: {', '.join(theme.leader_stocks[:3])}")
-        
-        return "\n".join(summary_parts)
+    def _classify_stage(self, theme: Theme) -> ThemeStage:
+        """分类阶段（兼容方法）"""
+        return self.classify_stage(theme)
 
 
-# 示例用法
-if __name__ == "__main__":
-    from collector import NewsCollector, News
-    
-    # 配置日志
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    )
-    
-    # 创建分析器
-    analyzer = ThemeAnalyzer()
-    
-    # 创建测试新闻
-    test_news = [
-        News(
-            id="test1",
-            title="低空经济政策重磅出台 万丰奥威涨停",
-            content="国务院发布低空空域管理改革政策，低空经济概念爆发，万丰奥威等多股涨停",
-            source="财联社",
-            url="http://test.com",
-            publish_time=datetime.now(),
-            category="policy"
-        ),
-        News(
-            id="test2",
-            title="eVTOL商业化加速 飞行汽车最快明年量产",
-            content="多家企业宣布eVTOL项目进展，商业化进程超预期",
-            source="同花顺",
-            url="http://test.com",
-            publish_time=datetime.now(),
-            category="finance"
-        ),
-    ]
-    
-    # 提取题材
-    themes = analyzer.extract_themes(test_news)
-    
-    for theme in themes:
-        print(analyzer.get_theme_summary(theme))
-        print("-" * 50)
+import random

@@ -1,152 +1,561 @@
-# 题材演化模式库
+# -*- coding: utf-8 -*-
+# 题材演化模式库 - 增强版
+# 定义不同类型题材的典型演化阶段和持续时间
+
 evolution_patterns:
+  # ═══════════════════════════════════════════════════════════════
+  # 新兴产业类演化模式
+  # ═══════════════════════════════════════════════════════════════
+
   疫情类:
+    description: "突发公共卫生事件驱动型，从防护到治疗到恢复"
     chain:
       - stage: "防护物资"
-        keywords: ["口罩", "防护服", "消毒液", "手套", "熔喷布"]
+        keywords: ["口罩", "防护服", "消毒液", "手套", "熔喷布", "抗原"]
         duration: "爆发后1-2周"
-        typical_stocks: ["振德医疗", "奥美医疗"]
+        duration_days: [7, 14]
+        typical_stocks: ["振德医疗", "奥美医疗", "英科医疗"]
+        stage_type: "supply"
+
       - stage: "检测诊断"
-        keywords: ["检测试剂", "核酸检测", "抗原检测", "体外诊断"]
+        keywords: ["检测试剂", "核酸检测", "抗原检测", "体外诊断", "PCR"]
         duration: "2-6周"
+        duration_days: [14, 42]
         typical_stocks: ["华大基因", "达安基因", "热景生物"]
+        stage_type: "detection"
+
       - stage: "疫苗研发"
-        keywords: ["疫苗", "临床试验", "mRNA", "灭活疫苗"]
+        keywords: ["疫苗", "临床试验", "mRNA", "灭活疫苗", "腺病毒载体"]
         duration: "2-8个月"
-        typical_stocks: ["智飞生物", "康希诺", "沃森生物"]
+        duration_days: [60, 240]
+        typical_stocks: ["智飞生物", "康希诺", "沃森生物", "复星医药"]
+        stage_type: "treatment"
+
       - stage: "治疗药物"
-        keywords: ["特效药", "治疗药物", "中和抗体", "小分子药"]
+        keywords: ["特效药", "治疗药物", "中和抗体", "小分子药", "瑞德西韦", "阿兹夫定"]
         duration: "3-12个月"
+        duration_days: [90, 360]
         typical_stocks: ["真实生物", "君实生物"]
+        stage_type: "treatment"
+
       - stage: "复工复产"
-        keywords: ["复工复产", "经济恢复", "复商复市"]
+        keywords: ["复工复产", "经济恢复", "复商复市", "旅游", "消费"]
         duration: "疫情受控后"
+        duration_days: [30, 180]
         typical_stocks: []
+        stage_type: "recovery"
 
   新能源类:
+    description: "政策+技术双轮驱动型"
     chain:
       - stage: "政策驱动"
-        keywords: ["政策支持", "补贴", "规划", "十四五", "双碳", "碳中和"]
+        keywords: ["政策支持", "补贴", "规划", "十四五", "双碳", "碳中和", "顶层设计"]
         duration: "政策后1-3月"
+        duration_days: [30, 90]
         typical_stocks: []
+        stage_type: "policy"
+        catalyst_weight: 1.5
+
       - stage: "技术突破"
-        keywords: ["技术突破", "量产", "成本下降", "能量密度", "效率提升"]
+        keywords: ["技术突破", "量产", "成本下降", "能量密度", "效率提升", "降本"]
         duration: "突破后1-6月"
+        duration_days: [30, 180]
         typical_stocks: ["宁德时代", "比亚迪", "隆基绿能"]
+        stage_type: "technology"
+
       - stage: "产业化"
-        keywords: ["产业化", "规模化", "订单", "产能释放", "量产交付"]
+        keywords: ["产业化", "规模化", "订单", "产能释放", "量产交付", "扩产"]
         duration: "3-12个月"
+        duration_days: [90, 360]
         typical_stocks: ["亿纬锂能", "恩捷股份", "璞泰来"]
+        stage_type: "industrialization"
+
       - stage: "业绩兑现"
-        keywords: ["业绩增长", "盈利", "营收增长", "净利润", "财报超预期"]
+        keywords: ["业绩增长", "盈利", "营收增长", "净利润", "财报超预期", "出货量"]
         duration: "规模放量后"
+        duration_days: [180, 365]
         typical_stocks: []
+        stage_type: "performance"
 
   固态电池类:
+    description: "新能源汽车核心技术创新型"
     chain:
       - stage: "技术突破"
-        keywords: ["固态电池", "全固态", "固态电解质", "锂金属负极", "能量密度突破"]
+        keywords: ["固态电池", "全固态", "固态电解质", "锂金属负极", "能量密度突破", "安全性"]
         duration: "突破后1-3月"
-        typical_stocks: ["宁德时代", "赣锋锂业", "国轩高科"]
+        duration_days: [30, 90]
+        typical_stocks: ["宁德时代", "赣锋锂业", "国轩高科", "清陶能源"]
+        stage_type: "technology"
+        trl_level: 5
+
       - stage: "量产准备"
-        keywords: ["量产", "生产线", "产能", "中试", "良品率"]
+        keywords: ["量产", "生产线", "产能", "中试", "良品率", "工艺", "设备"]
         duration: "6-18月"
+        duration_days: [180, 540]
         typical_stocks: ["先导智能", "赢合科技"]
+        stage_type: "preparation"
+        trl_level: 7
+
       - stage: "装车验证"
-        keywords: ["装车", "配套", "车企", "定点", "验证"]
+        keywords: ["装车", "配套", "车企", "定点", "验证", "测试", "公告"]
         duration: "量产前后"
-        typical_stocks: ["比亚迪", "蔚来"]
+        duration_days: [90, 270]
+        typical_stocks: ["比亚迪", "蔚来", "上汽"]
+        stage_type: "verification"
+        trl_level: 8
+
       - stage: "规模放量"
-        keywords: ["放量", "出货", "装机量", "市场份额"]
+        keywords: ["放量", "出货", "装机量", "市场份额", "订单", "交付量"]
         duration: "量产后"
+        duration_days: [180, 730]
         typical_stocks: []
+        stage_type: "scale_up"
 
   低空经济类:
+    description: "政策开放驱动型新兴赛道"
     chain:
       - stage: "政策驱动"
-        keywords: ["低空经济", "低空空域", "空域管理", "示范区", "试点"]
+        keywords: ["低空经济", "低空空域", "空域管理", "示范区", "试点", "政策放开"]
         duration: "政策后1-3月"
+        duration_days: [30, 90]
         typical_stocks: []
+        stage_type: "policy"
+
       - stage: "产业规划"
-        keywords: ["产业规划", "园区", "基地", "招商引资", "产业链布局"]
+        keywords: ["产业规划", "园区", "基地", "招商引资", "产业链布局", "规划"]
         duration: "3-12月"
+        duration_days: [90, 360]
         typical_stocks: ["万丰奥威", "中信海直"]
+        stage_type: "planning"
+
       - stage: "技术验证"
-        keywords: ["eVTOL", "飞行汽车", "适航认证", "试飞", "商业化验证"]
+        keywords: ["eVTOL", "飞行汽车", "适航认证", "试飞", "商业化验证", "首飞"]
         duration: "6-24月"
+        duration_days: [180, 720]
         typical_stocks: ["亿航智能", "峰飞航空"]
+        stage_type: "verification"
+
       - stage: "商业化运营"
-        keywords: ["商业运营", "首飞", "载人", "城市空中交通", "UAM"]
+        keywords: ["商业运营", "首飞", "载人", "城市空中交通", "UAM", "运营许可"]
         duration: "商业化初期"
+        duration_days: [180, 730]
         typical_stocks: []
+        stage_type: "commercial"
 
   AI类:
+    description: "技术迭代驱动型，从大模型到应用"
     chain:
       - stage: "技术突破"
-        keywords: ["模型突破", "算法革新", "性能提升", "GPT", "大模型", "参数"]
+        keywords: ["模型突破", "算法革新", "性能提升", "GPT", "大模型", "参数", "benchmark"]
         duration: "突破后1-3月"
-        typical_stocks: ["科大讯飞", "寒武纪", "海光信息"]
+        duration_days: [30, 90]
+        typical_stocks: ["科大讯飞", "寒武纪", "海光信息", "景嘉微"]
+        stage_type: "technology"
+
       - stage: "生态建设"
-        keywords: ["生态", "开发者", "API", "平台", "插件"]
+        keywords: ["生态", "开发者", "API", "平台", "插件", "开源", "社区"]
         duration: "2-6月"
-        typical_stocks: ["百度", "阿里", "腾讯"]
+        duration_days: [60, 180]
+        typical_stocks: ["百度", "阿里", "腾讯", "字节跳动"]
+        stage_type: "ecosystem"
+
       - stage: "应用落地"
-        keywords: ["应用场景", "商业化", "B端", "C端", "解决方案"]
+        keywords: ["应用场景", "商业化", "B端", "C端", "解决方案", "产品", "落地"]
         duration: "3-12月"
+        duration_days: [90, 360]
         typical_stocks: []
+        stage_type: "application"
+
       - stage: "业绩兑现"
-        keywords: ["收入增长", "用户增长", "付费率", "营收"]
+        keywords: ["收入增长", "用户增长", "付费率", "营收", "盈利", "变现"]
         duration: "规模后"
+        duration_days: [180, 730]
         typical_stocks: []
+        stage_type: "performance"
+
+  # ═══════════════════════════════════════════════════════════════
+  # 消费电子类演化模式
+  # ═══════════════════════════════════════════════════════════════
 
   消费电子类:
+    description: "产品周期驱动型"
     chain:
       - stage: "产品发布"
-        keywords: ["发布会", "新品", "首发", "亮相", "官宣"]
+        keywords: ["发布会", "新品", "首发", "亮相", "官宣", "曝光", "谍照"]
         duration: "发布前1-2周"
+        duration_days: [7, 14]
         typical_stocks: []
+        stage_type: "announcement"
+
       - stage: "预售抢购"
-        keywords: ["预售", "抢购", "预约", "破纪录", "预订"]
+        keywords: ["预售", "抢购", "预约", "破纪录", "预订", "秒光", "加单"]
         duration: "发布后1-4周"
+        duration_days: [7, 28]
         typical_stocks: ["立讯精密", "歌尔股份", "蓝思科技"]
+        stage_type: "pre_sale"
+
       - stage: "量产爬坡"
-        keywords: ["量产", "产能", "良率", "供应", "备货"]
+        keywords: ["量产", "产能", "良率", "供应", "备货", "扩产", "排产"]
         duration: "1-3个月"
+        duration_days: [30, 90]
         typical_stocks: ["鹏鼎控股", "东山精密"]
+        stage_type: "production"
+
       - stage: "销售旺季"
-        keywords: ["销量", "市场份额", "节假日", "618", "双11"]
+        keywords: ["销量", "市场份额", "节假日", "618", "双11", "圣诞", "旺季"]
         duration: "持续"
+        duration_days: [30, 180]
         typical_stocks: []
+        stage_type: "sales"
+
+  苹果产业链:
+    description: "苹果新品驱动型产业链行情"
+    chain:
+      - stage: "WWDC发布"
+        keywords: ["WWDC", "iOS", "开发者大会", "软件", "系统"]
+        duration: "6月前后1-2周"
+        duration_days: [7, 14]
+        typical_stocks: []
+
+      - stage: "iPhone发布"
+        keywords: ["iPhone", "发布会", "新品", "旗舰", "苹果秋季发布会"]
+        duration: "9月前后1-2周"
+        duration_days: [7, 14]
+        typical_stocks: []
+
+      - stage: "预售期"
+        keywords: ["预售", "抢购", "预订", "破纪录", "iPhone预约"]
+        duration: "发布后2-4周"
+        duration_days: [14, 28]
+        typical_stocks: ["立讯精密", "歌尔股份", "蓝思科技", "鹏鼎控股"]
+
+      - stage: "出货期"
+        keywords: ["出货", "交付", "产能爬坡", "供应", "代工"]
+        duration: "发布后1-3月"
+        duration_days: [30, 90]
+        typical_stocks: ["富士康", "蓝思科技", "伯恩光学"]
+
+      - stage: "销量验证"
+        keywords: ["销量", "出货量", "市占率", "业绩", "财报"]
+        duration: "上市后持续"
+        duration_days: [60, 180]
+        typical_stocks: []
+
+  # ═══════════════════════════════════════════════════════════════
+  # 半导体类演化模式
+  # ═══════════════════════════════════════════════════════════════
 
   半导体类:
+    description: "国产替代+技术突破双驱动"
     chain:
       - stage: "技术突破"
-        keywords: ["突破", "量产", "28nm", "14nm", "7nm", "国产替代"]
+        keywords: ["突破", "量产", "28nm", "14nm", "7nm", "国产替代", "首片", "首次"]
         duration: "突破后1-6月"
+        duration_days: [30, 180]
         typical_stocks: ["中芯国际", "华虹半导体"]
+        stage_type: "technology"
+
       - stage: "客户验证"
-        keywords: ["验证", "测试", "导入", "认证", "送样"]
+        keywords: ["验证", "测试", "导入", "认证", "送样", "客户认证"]
         duration: "3-12月"
+        duration_days: [90, 360]
         typical_stocks: []
+        stage_type: "verification"
+
       - stage: "小批量量产"
-        keywords: ["小批量", "量产", "产能", "订单", "交付"]
+        keywords: ["小批量", "量产", "产能", "订单", "交付", "爬坡"]
         duration: "量产后3-12月"
+        duration_days: [90, 360]
         typical_stocks: ["长电科技", "通富微电"]
+        stage_type: "production"
+
       - stage: "规模放量"
-        keywords: ["出货", "放量", "市占率", "规模化"]
+        keywords: ["出货", "放量", "市占率", "规模化", "业绩"]
         duration: "规模后"
+        duration_days: [180, 730]
+        typical_stocks: []
+        stage_type: "scale"
+
+  # ═══════════════════════════════════════════════════════════════
+  # 周期类演化模式
+  # ═══════════════════════════════════════════════════════════════
+
+  猪肉周期:
+    description: "养殖周期驱动型"
+    chain:
+      - stage: "产能去化"
+        keywords: ["去产能", "亏损", "淘汰", "能繁母猪下降", "补栏积极性"]
+        duration: "1-6个月"
+        duration_days: [30, 180]
         typical_stocks: []
 
+      - stage: "周期拐点"
+        keywords: ["拐点", "反转", "见底", "猪价上涨", "周期启动"]
+        duration: "1-2个月"
+        duration_days: [30, 60]
+        typical_stocks: ["牧原股份", "温氏股份", "新希望"]
+
+      - stage: "景气上行"
+        keywords: ["涨价", "盈利", "景气", "高猪价", "暴利"]
+        duration: "6-18个月"
+        duration_days: [180, 540]
+        typical_stocks: []
+
+      - stage: "产能扩张"
+        keywords: ["扩产", "补栏", "能繁母猪增加", "新建产能"]
+        duration: "高景气持续期"
+        duration_days: [180, 360]
+        typical_stocks: []
+
+  航运周期:
+    description: "全球贸易周期驱动"
+    chain:
+      - stage: "运价上涨"
+        keywords: ["运价上涨", "爆舱", "涨价", "缺箱", "拥堵"]
+        duration: "1-3个月"
+        duration_days: [30, 90]
+        typical_stocks: ["中远海控", "招商轮船"]
+
+      - stage: "景气高位"
+        keywords: ["运价高位", "业绩爆发", "盈利大增", "分红"]
+        duration: "3-12个月"
+        duration_days: [90, 360]
+        typical_stocks: []
+
+      - stage: "运力投放"
+        keywords: ["新船交付", "运力增加", "下水", "造船"]
+        duration: "景气高位持续"
+        duration_days: [180, 730]
+        typical_stocks: ["中国船舶", "中船防务"]
+
+      - stage: "景气回落"
+        keywords: ["运价下跌", "运力过剩", "业绩下滑"]
+        duration: "12-36个月"
+        duration_days: [360, 1080]
+        typical_stocks: []
+
+  # ═══════════════════════════════════════════════════════════════
+  # 新增演化模式
+  # ═══════════════════════════════════════════════════════════════
+
+  AI应用类:
+    description: "AI技术落地驱动型"
+    chain:
+      - stage: "产品发布"
+        keywords: ["AI产品", "发布", "上线", "内测", "公测", "开放"]
+        duration: "发布前后1-2周"
+        duration_days: [7, 14]
+        typical_stocks: []
+
+      - stage: "用户增长"
+        keywords: ["用户增长", "DAU", "MAU", "日活", "周活", "破亿"]
+        duration: "发布后1-3月"
+        duration_days: [30, 90]
+        typical_stocks: []
+
+      - stage: "商业化验证"
+        keywords: ["付费", "订阅", "收入", "商业化", "变现", "盈利模式"]
+        duration: "3-12月"
+        duration_days: [90, 360]
+        typical_stocks: []
+
+      - stage: "业绩兑现"
+        keywords: ["营收", "利润", "超预期", "财报", "季报"]
+        duration: "商业化后"
+        duration_days: [180, 730]
+        typical_stocks: []
+
+  人形机器人:
+    description: "具身智能+制造业升级驱动"
+    chain:
+      - stage: "技术突破"
+        keywords: ["突破", "首创", "全球首个", "关键技术", "核心零部件"]
+        duration: "突破后1-3月"
+        duration_days: [30, 90]
+        typical_stocks: ["绿的谐波", "柯力传感"]
+
+      - stage: "产品发布"
+        keywords: ["发布", "亮相", "展出", "展示", "演示"]
+        duration: "展会前后1-2周"
+        duration_days: [7, 14]
+        typical_stocks: []
+
+      - stage: "量产准备"
+        keywords: ["量产", "产能", "产线", "工厂", "制造基地"]
+        duration: "发布后3-12月"
+        duration_days: [90, 360]
+        typical_stocks: ["汇川技术", "埃斯顿"]
+
+      - stage: "商业化落地"
+        keywords: ["订单", "交付", "应用", "落地", "商业化"]
+        duration: "量产后"
+        duration_days: [180, 730]
+        typical_stocks: []
+
+  算力:
+    description: "AI算力需求爆发驱动"
+    chain:
+      - stage: "需求爆发"
+        keywords: ["算力需求", "GPU短缺", "订单大增", "排队"]
+        duration: "需求出现后1-3月"
+        duration_days: [30, 90]
+        typical_stocks: ["英伟达", "AMD"]
+
+      - stage: "产能扩张"
+        keywords: ["扩产", "新建", "产能释放", "H100", "A100"]
+        duration: "需求爆发后3-12月"
+        duration_days: [90, 360]
+        typical_stocks: ["浪潮信息", "中科曙光"]
+
+      - stage: "业绩兑现"
+        keywords: ["营收", "利润", "超预期", "财报"]
+        duration: "扩张后"
+        duration_days: [180, 365]
+        typical_stocks: []
+
+  低空经济完整版:
+    description: "低空经济全产业链演化"
+    chain:
+      - stage: "政策密集期"
+        keywords: ["低空政策", "空域开放", "规划", "试点", "文件"]
+        duration: "政策出台前后1-3月"
+        duration_days: [30, 90]
+        typical_stocks: []
+
+      - stage: "基础设施"
+        keywords: ["低空基础设施", "起降场", "低空智联", "通信", "感知"]
+        duration: "政策后6-18月"
+        duration_days: [180, 540]
+        typical_stocks: ["四川九洲"]
+
+      - stage: "飞行器制造"
+        keywords: ["eVTOL", "飞行汽车", "无人机", "适航认证"]
+        duration: "政策后12-36月"
+        duration_days: [360, 1080]
+        typical_stocks: ["亿航智能", "峰飞航空", "万丰奥威"]
+
+      - stage: "运营服务"
+        keywords: ["商业运营", "载人", "城市空中交通", "UAM"]
+        duration: "成熟期"
+        duration_days: [720, 1825]
+        typical_stocks: []
+
+# ═══════════════════════════════════════════════════════════════
+# 题材交叉关联
+# ═══════════════════════════════════════════════════════════════
+
 cross_theme_correlations:
-  - trigger: "口罩需求"
-    leads_to: ["检测试剂", "疫苗"]
-    correlation: 0.8
   - trigger: "新能源汽车购置税减免"
-    leads_to: ["充电桩", "锂电", "零部件"]
+    leads_to: ["充电桩", "锂电", "零部件", "智能驾驶"]
     correlation: 0.7
+    description: "补贴政策带动全产业链"
+
   - trigger: "AI大模型发布"
-    leads_to: ["算力", "应用", "数据"]
+    leads_to: ["算力", "AI应用", "数据要素"]
     correlation: 0.9
+    description: "大模型发布带动上游算力和下游应用"
+
   - trigger: "iPhone发布"
-    leads_to: ["苹果链", "射频", "光学", "散热"]
+    leads_to: ["苹果产业链", "消费电子", "射频", "光学", "散热"]
     correlation: 0.8
+    description: "苹果新品带动消费电子全产业链"
+
+  - trigger: "低空经济政策"
+    leads_to: ["无人机", "低空基础设施", "低空政策", "eVTOL"]
+    correlation: 0.85
+    description: "低空经济政策带动全产业链"
+
+  - trigger: "固态电池突破"
+    leads_to: ["新能源汽车", "储能", "新材料"]
+    correlation: 0.8
+    description: "电池技术突破带动新能源和储能"
+
+  - trigger: "华为新品发布"
+    leads_to: ["华为产业链", "消费电子", "半导体", "鸿蒙"]
+    correlation: 0.85
+    description: "华为新品带动全产业链"
+
+# ═══════════════════════════════════════════════════════════════
+# 题材阶段持续时间参考
+# ═══════════════════════════════════════════════════════════════
+
+stage_duration_reference:
+  萌芽期:
+    short: 3
+    medium: 7
+    long: 14
+    unit: "天"
+
+  爆发期:
+    short: 5
+    medium: 14
+    long: 30
+    unit: "天"
+
+  炒作期:
+    short: 7
+    medium: 21
+    long: 45
+    unit: "天"
+
+  退潮期:
+    short: 3
+    medium: 7
+    long: 14
+    unit: "天"
+
+  消亡期:
+    short: 0
+    medium: 0
+    long: 0
+    unit: "天"
+
+# ═══════════════════════════════════════════════════════════════
+# 典型股票案例库
+# ═══════════════════════════════════════════════════════════════
+
+typical_cases:
+  固态电池:
+    - name: "宁德时代"
+      code: "300750"
+      role: "龙头"
+      relation: "固态电池核心标的，硫化物路线领先"
+      stage_involved: ["技术突破", "量产准备"]
+
+    - name: "赣锋锂业"
+      code: "002460"
+      role: "龙头"
+      relation: "固态电池上游布局，半固态已量产"
+      stage_involved: ["技术突破", "量产准备", "装车验证"]
+
+    - name: "当升科技"
+      code: "300073"
+      role: "跟风"
+      relation: "正极材料供应商"
+      stage_involved: ["量产准备"]
+
+  低空经济:
+    - name: "亿航智能"
+      code: "688306"
+      role: "龙头"
+      relation: "eVTOL全球领先，适航认证"
+      stage_involved: ["技术验证", "商业化运营"]
+
+    - name: "万丰奥威"
+      code: "002085"
+      role: "跟风"
+      relation: "通航飞机业务，低空受益"
+      stage_involved: ["产业规划", "技术验证"]
+
+  AI:
+    - name: "科大讯飞"
+      code: "002230"
+      role: "龙头"
+      relation: "AI应用龙头，大模型领先"
+      stage_involved: ["技术突破", "应用落地", "业绩兑现"]
+
+    - name: "寒武纪"
+      code: "688256"
+      role: "跟风"
+      relation: "AI芯片，算力受益"
+      stage_involved: ["技术突破", "应用落地"]
